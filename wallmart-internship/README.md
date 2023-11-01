@@ -221,3 +221,63 @@ Your task is to draft a UML class diagram describing the data processors for a p
     - A shipment is recorded as an origin, a destination, and a collection of products, each with an associated quantity.
 
 ![task3image](Task3-RelationalDatabaseDesign/task3.png)
+
+# Task 4
+
+Your team has been tasked with collecting metrics on a plethora of disparate shipping data. This task comes straight from the top, so it would be wise to give it your all. The data is contained in a number of different spreadsheets, each with its own competing schema. In order to interrogate the data, all of it has to be in the same place and in the same format. Currently, the shipping data exists in several places in several formats and is therefore impossible to query. To combine the spreadsheets, you need to write a python script to read through every row, extract the pertinent data, figure out how to combine it, munge it into the right format, and upload it to the database. Plenty of steps, but the resulting data will be much easier to query. Once the database contains all the data, you can pass it off to the analysis team to extract all the relevant metrics.
+
+### Task 4
+
+`Part 1: Get the data`
+
+First, you need to get your hands on the relevant data. The shipping department has been kind enough to provide you with a repository containing all of their spreadsheets, as well as a copy of the sqlite database. First, fork and clone the repository at: https://github.com/theforage/forage-walmart-task-4
+
+`Part 2: Populate the database`
+
+Your task is to insert all of the data contained in the provided spreadsheets into the SQLite database. You will write a Python script which:
+
+- Reads each row from the spreadsheets.
+- Extracts the relevant data.
+- Munges it into a format that fits the database schema.
+- Inserts the data into the database.
+
+Spreadsheet 0 is self contained and can simply be inserted into the database, but spreadsheets 1 and 2 are dependent on one another. Spreadsheet 1 contains a single product per row, you will need to combine each row based on its shipping identifier, determine the quantity of goods in the shipment, and add a new row to the database for each product in the shipment. The origin and destination for each shipment in spreadsheet 1 are contained in spreadsheet 2. You may assume that all the given data is valid - product names are always spelled the same way, quantities are positive, etc.
+
+## `Code Implementation`
+
+Python script that imports data from CSV spreadsheets into a SQLite database. The script works by first creating a `DatabaseConnector` class, which provides methods for connecting to the database, populating it with data, and closing the connection.
+
+The `DatabaseConnector` class has two main methods:
+
+`populate()` - This method populates the database with data imported from the CSV spreadsheets. It does this by opening each spreadsheet, creating a CSV reader object, and iterating over the rows in the spreadsheet. For each row, the method extracts the required fields and inserts them into the database.
+
+`insert_product_if_it_does_not_already_exist()` - This method inserts a new product into the database, if it does not already exist. It does this by first checking if a product with the given name exists in the database. If it does not, the method inserts a new product into the database. Otherwise, it ignores the request.
+
+`insert_shipment()` - This method inserts a new shipment into the database. It does this by first collecting the product ID for the product being shipped. It then inserts a new shipment into the database, using the product ID, quantity, origin, and destination.
+
+The main function in the script creates a `DatabaseConnector` object and calls the `populate()` method to populate the database with data from the CSV spreadsheets. It then calls the `close()` method to close the connection to the database.
+
+1. The script imports the `csv` and `sqlite3` modules.
+2. The script defines a class called `DatabaseConnector`, which provides methods for connecting to the database, populating it with data, and closing the connection.
+3. The script creates a `DatabaseConnector` object and passes in the path to the SQLite database file.
+4. The script calls the `populate()` method on the `DatabaseConnector` object to populate the database with data from the CSV spreadsheets.
+5. The script closes the connection to the database by calling the `close()` method on the `DatabaseConnector` object.
+
+The `populate()` method works as follows:
+
+1. The method opens each spreadsheet and creates a CSV reader object.
+2. The method iterates over the rows in the spreadsheet.
+3. For each row, the method extracts the required fields, such as the product name, product quantity, origin, and destination.
+4. The method inserts the data into the database.
+5. The method gives an indication of progress by printing to the console.
+
+The `insert_product_if_it_does_not_already_exist()` method works as follows:
+
+1. The method checks if a product with the given name exists in the database.
+2. If it does not, the method inserts a new product into the database.
+3. Otherwise, it ignores the request.
+
+The `insert_shipment()` method works as follows:
+
+- The method collects the product ID for the product being shipped.
+- The method inserts a new shipment into the database, using the product ID, quantity, origin, and destination.
