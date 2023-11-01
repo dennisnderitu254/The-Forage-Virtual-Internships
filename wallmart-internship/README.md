@@ -184,3 +184,5 @@ Here are the requirements for your design:
 - The processor must implement a process method that accepts a DataPoint as a parameter.
     - This method will have different behavior depending on the currently configured mode and database.
 
+![task2image](Task2-SoftwareArchitecture/task2.png)
+
